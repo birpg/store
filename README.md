@@ -8,11 +8,11 @@ node.js + express  + mongoose + vue全家桶 + ES6/7 + sass + axios + element-ui
 
 ## 项目运行
 
-> git clone git@github.com:birpg/STORE.git
+> 下载项目到本地: git clone git@github.com:birpg/store.git
 >
-> npm install
+> 下载依赖项: npm install
 >
-> npm run dev （运行）
+> 运行: npm run dev
 
 ## 效果演示
 
