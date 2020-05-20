@@ -17,11 +17,7 @@
               placeholder="请输入入库单号"
               @keyup.enter.native="onSearch()"
             >
-              <el-button
-                @click="onSearch()"
-                slot="append"
-                icon="el-icon-search"
-              ></el-button>
+              <el-button @click="onSearch()" slot="append" icon="el-icon-search"></el-button>
             </el-input>
             <el-button
               class="btnRight"
@@ -41,99 +37,53 @@
             max-height="450"
             style="width: 100%"
           >
-            <el-table-column
-              prop="numbering "
-              align="center"
-              label="入库单号"
-              width="130"
-            >
+            <el-table-column prop="numbering " align="center" label="入库单号" width="130">
               <template v-slot="scope">
                 <span>{{ scope.row.numbering }}</span>
               </template>
             </el-table-column>
-            <el-table-column
-              prop="store"
-              align="center"
-              label="入库门店"
-              width="200"
-            >
+            <el-table-column prop="store" align="center" label="入库门店" width="200">
               <template v-slot="scope">
                 <span>{{ scope.row.store }}</span>
               </template>
             </el-table-column>
 
-            <el-table-column
-              prop="type"
-              align="center"
-              label="入库类型"
-              width="120"
-            >
+            <el-table-column prop="type" align="center" label="入库类型" width="120">
               <template v-slot="scope">
                 <span>{{ scope.row.type }}</span>
               </template>
             </el-table-column>
-            <el-table-column
-              prop="total"
-              align="center"
-              label="入库数量"
-              width="100"
-            >
+            <el-table-column prop="total" align="center" label="入库数量" width="100">
               <template v-slot="scope">
                 <span>{{ scope.row.total }}</span>
               </template>
             </el-table-column>
 
-            <el-table-column
-              prop="personnel"
-              align="center"
-              label="经办人员"
-              width="100"
-            >
+            <el-table-column prop="personnel" align="center" label="经办人员" width="100">
               <template v-slot="scope">
                 <span>{{ scope.row.personnel }}</span>
               </template>
             </el-table-column>
 
-            <el-table-column
-              prop="ordrMakingStf"
-              align="center"
-              label="制单人员"
-              width="100"
-            >
+            <el-table-column prop="ordrMakingStf" align="center" label="制单人员" width="100">
               <template v-slot="scope">
                 <span>{{ scope.row.ordrMakingStf }}</span>
               </template>
             </el-table-column>
 
-            <el-table-column
-              prop="date "
-              align="center"
-              label="制单日期"
-              width="180"
-            >
+            <el-table-column prop="date " align="center" label="制单日期" width="180">
               <template v-slot="scope">
                 <span>{{ scope.row.date | dateFormat }}</span>
               </template>
             </el-table-column>
 
-            <el-table-column
-              prop="audit"
-              align="center"
-              label="审核状态"
-              width="100"
-            >
+            <el-table-column prop="audit" align="center" label="审核状态" width="100">
               <template v-slot="scope">
                 <span>{{ scope.row.audit }}</span>
               </template>
             </el-table-column>
 
-            <el-table-column
-              prop="operation"
-              align="center"
-              label="操作"
-              fixed="right"
-              width="80"
-            >
+            <el-table-column prop="operation" align="center" label="操作" fixed="right" width="80">
               <template v-slot="scope">
                 <el-dropdown>
                   <span class="el-dropdown-link">
@@ -146,9 +96,7 @@
                       ></el-dropdown-item
                     >
                     <el-dropdown-item
-                      ><el-button
-                        type="text"
-                        @click="onDeleteStorage(scope.row, scope.$index)"
+                      ><el-button type="text" @click="onDeleteStorage(scope.row, scope.$index)"
                         >删除</el-button
                       ></el-dropdown-item
                     >
@@ -185,7 +133,7 @@
 <script>
 export default {
   name: 'storage',
-  data() {
+  data () {
     return {
       tableData: [],
       allTableData: [],
@@ -201,29 +149,32 @@ export default {
     }
   },
   watch: {
-    search: function(val) {
+    search: function (val) {
       if (val == '') return this.getProfile()
     },
-    $route: function() {
+    $route: function () {
       if (this.$route.meta.show) {
         this.getProfile()
       }
     }
   },
-  created() {
+  created () {
     this.getProfile()
   },
   methods: {
-    getProfile() {
+    async getProfile () {
       // 获取数据
-      this.$axios('/api/storage').then(res => {
-        this.allTableData = res.data
-        // 设置分页数据
-        this.setPaginations()
-      })
+      const res = await this.$axios('/api/storage')
+      if (res.status !== 200) {
+        this.$message.error('获取数据失败!')
+      }
+      this.allTableData = res.data
+      // 设置分页数据
+      this.setPaginations()
+
     },
     // 搜索
-    onSearch() {
+    onSearch () {
       let items = this.allTableData.find(
         item => item.numbering == this.search || item.name == this.search
       )
@@ -237,7 +188,7 @@ export default {
         this.getProfile()
       }
     },
-    onAddStorage() {
+    onAddStorage () {
       // 添加
       this.$router.push({
         path: '/storage/addStorage',
@@ -247,7 +198,7 @@ export default {
         }
       })
     },
-    onEditStorage(row) {
+    onEditStorage (row) {
       // 编辑
       this.$router.push({
         path: '/storage/addStorage',
@@ -258,14 +209,14 @@ export default {
         }
       })
     },
-    onDeleteStorage(row, index) {
+    onDeleteStorage (row, index) {
       // 删除
       this.$axios.delete(`/api/storage/delete/${row._id}`).then(res => {
         this.$message('删除成功')
         this.getProfile()
       })
     },
-    handleCurrentChange(page) {
+    handleCurrentChange (page) {
       // 当前页
       let sortnum = this.paginations.page_size * (page - 1)
       let table = this.allTableData.filter((item, index) => {
@@ -276,7 +227,7 @@ export default {
         return index < this.paginations.page_size
       })
     },
-    handleSizeChange(page_size) {
+    handleSizeChange (page_size) {
       // 切换size
       this.paginations.page_index = 1
       this.paginations.page_size = page_size
@@ -284,7 +235,7 @@ export default {
         return index < page_size
       })
     },
-    setPaginations() {
+    setPaginations () {
       // 总页数
       this.paginations.total = this.allTableData.length
       this.paginations.page_index = 1

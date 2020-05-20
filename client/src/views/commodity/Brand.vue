@@ -15,18 +15,9 @@
             placeholder="请输入编码/品牌名称"
             @keyup.enter.native="onSearch()"
           >
-            <el-button
-              @click="onSearch()"
-              slot="append"
-              icon="el-icon-search"
-            ></el-button>
+            <el-button @click="onSearch()" slot="append" icon="el-icon-search"></el-button>
           </el-input>
-          <el-button
-            class="btnRight"
-            type="primary"
-            size="small"
-            icon="view"
-            @click="onAddBrand()"
+          <el-button class="btnRight" type="primary" size="small" icon="view" @click="onAddBrand()"
             >新增</el-button
           >
         </div>
@@ -39,43 +30,22 @@
           max-height="450"
           style="width: 100%"
         >
-          <el-table-column type="index" align="center" label="序号" width="100">
-          </el-table-column>
+          <el-table-column type="index" align="center" label="序号" width="100"> </el-table-column>
 
-          <el-table-column
-            prop="coding"
-            align="center"
-            label="编码"
-            width="350"
-          >
+          <el-table-column prop="coding" align="center" label="编码" width="350">
             <template v-slot="scope">
               <span>{{ scope.row.coding }}</span>
             </template>
           </el-table-column>
-          <el-table-column
-            prop="name"
-            align="center"
-            label="品牌名称"
-            width="350"
-          >
+          <el-table-column prop="name" align="center" label="品牌名称" width="350">
             <template v-slot="scope">
               <span>{{ scope.row.name }}</span>
             </template>
           </el-table-column>
 
-          <el-table-column
-            prop="operation"
-            align="center"
-            label="操作"
-            fixed="right"
-            width="300"
-          >
+          <el-table-column prop="operation" align="center" label="操作" fixed="right" width="300">
             <template v-slot="scope">
-              <el-button
-                type="warning"
-                icon="edit"
-                size="small"
-                @click="onEditBrand(scope.row)"
+              <el-button type="warning" icon="edit" size="small" @click="onEditBrand(scope.row)"
                 >修改</el-button
               >
               <el-button
@@ -110,11 +80,7 @@
       </el-card>
     </div>
     <!-- 弹框页面 -->
-    <DialogBrand
-      :dialog="dialog"
-      :form="form"
-      @update="getProfile"
-    ></DialogBrand>
+    <DialogBrand :dialog="dialog" :form="form" @update="getProfile"></DialogBrand>
   </div>
 </template>
 
@@ -122,7 +88,7 @@
 const DialogBrand = () => import('../../components/commodity/DialogBrand')
 export default {
   name: 'brand',
-  data() {
+  data () {
     return {
       tableData: [],
       allTableData: [],
@@ -148,28 +114,29 @@ export default {
     }
   },
   watch: {
-    search: function(val) {
+    search: function (val) {
       if (val == '') return this.getProfile()
     }
   },
   components: {
     DialogBrand
   },
-  created() {
+  created () {
     this.getProfile()
   },
   methods: {
-    getProfile() {
+    async getProfile () {
       // 获取数据
-      this.$axios('/api/brand').then(res => {
-        this.allTableData = res.data
-
-        // 设置分页数据
-        this.setPaginations()
-      })
+      const res = await this.$axios('/api/brand')
+      if (res.status !== 200) {
+        this.$message.error('获取数据失败!')
+      }
+      this.allTableData = res.data
+      // 设置分页数据
+      this.setPaginations()
     },
     // 搜索
-    onSearch() {
+    onSearch () {
       let items = this.allTableData.find(
         item => item.coding == this.search || item.name == this.search
       )
@@ -183,7 +150,7 @@ export default {
         this.getProfile()
       }
     },
-    onAddBrand() {
+    onAddBrand () {
       // 添加
       this.dialog = {
         show: true,
@@ -191,7 +158,7 @@ export default {
         option: 'add'
       }
     },
-    onEditBrand(row) {
+    onEditBrand (row) {
       // 编辑
       this.dialog = {
         show: true,
@@ -204,14 +171,14 @@ export default {
         id: row._id
       }
     },
-    onDeleteBrand(row, index) {
+    onDeleteBrand (row, index) {
       // 删除
       this.$axios.delete(`/api/brand/delete/${row._id}`).then(res => {
         this.$message('删除成功')
         this.getProfile()
       })
     },
-    handleCurrentChange(page) {
+    handleCurrentChange (page) {
       // 当前页
       let sortnum = this.paginations.page_size * (page - 1)
       let table = this.allTableData.filter((item, index) => {
@@ -222,7 +189,7 @@ export default {
         return index < this.paginations.page_size
       })
     },
-    handleSizeChange(page_size) {
+    handleSizeChange (page_size) {
       // 切换size
       this.paginations.page_index = 1
       this.paginations.page_size = page_size
@@ -230,7 +197,7 @@ export default {
         return index < page_size
       })
     },
-    setPaginations() {
+    setPaginations () {
       // 总页数
       this.paginations.total = this.allTableData.length
       this.paginations.page_index = 1

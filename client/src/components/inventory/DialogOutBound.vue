@@ -1,10 +1,6 @@
 <template>
   <div class="logOutBound">
-    <el-dialog
-      :title="dialogShow.title"
-      :visible.sync="dialogShow.show"
-      @open="dialogOpen"
-    >
+    <el-dialog :title="dialogShow.title" :visible.sync="dialogShow.show" @open="dialogOpen">
       <el-table
         :header-cell-style="{
           background: '#f2f2f2',
@@ -18,12 +14,7 @@
         max-height="350"
         style="width: 100%"
       >
-        <el-table-column
-          :reserve-selection="true"
-          type="selection"
-          align="center"
-          width="50"
-        >
+        <el-table-column :reserve-selection="true" type="selection" align="center" width="50">
         </el-table-column>
 
         <el-table-column prop="coding" align="center" label="编码" width="150">
@@ -108,7 +99,7 @@ export default {
     dialogShow: Object,
     delTab: Array
   },
-  data() {
+  data () {
     return {
       tableData: [],
       allTableData: [],
@@ -126,19 +117,19 @@ export default {
       }
     }
   },
-  created() {
+  created () {
     this.getProfile()
     this.mounted()
   },
   computed: {
     // 筛选功能需要的数据格式
-    categoryData: function() {
+    categoryData: function () {
       let arr = []
       let options = []
       for (let i = 0; i < this.allTableData.length; i++) {
         arr.push(this.allTableData[i].category)
       }
-      let filterArr = arr.filter(function(value, index, self) {
+      let filterArr = arr.filter(function (value, index, self) {
         return self.indexOf(value) === index
       })
 
@@ -153,7 +144,7 @@ export default {
     }
   },
   methods: {
-    mounted() {
+    mounted () {
       // 获取所有商品类别数据
       this.$axios
         .get('/api/category', {
@@ -167,15 +158,17 @@ export default {
         })
     },
     // 获取商品档案数据
-    getProfile() {
-      this.$axios('/api/file').then(res => {
-        this.allTableData = res.data
-        // 设置分页数据
-        this.setPaginations()
-      })
+    async getProfile () {
+      const res = await this.$axios('/api/file')
+      if (res.status !== 200) {
+        this.$message.error('获取数据失败!')
+      }
+      this.allTableData = res.data
+      // 设置分页数据
+      this.setPaginations()
     },
     // 勾选
-    dialogOpen() {
+    dialogOpen () {
       this.$nextTick(() => {
         this.allTableData.forEach((item, index) => {
           this.$refs.refTable.toggleRowSelection(
@@ -186,20 +179,20 @@ export default {
       })
     },
     // 类别筛选
-    filterTag(value, row) {
+    filterTag (value, row) {
       return row.category === value
     },
     //记住复选项
-    getRowKey(row) {
+    getRowKey (row) {
       // 指定一个key标识这一行的数据
       return row._id
     },
     // 选中的数据
-    handleCheckChange(val) {
+    handleCheckChange (val) {
       this.tableChecked = val
     },
     // 添加选中的商品
-    submitForm(rows) {
+    submitForm (rows) {
       for (let j in this.delTab) {
         for (let i in rows) {
           if (this.delTab[j] == rows[i]._id) {
@@ -212,7 +205,7 @@ export default {
       this.dialogShow.show = false
       this.$emit('update', this.table)
     },
-    handleCurrentChange(page) {
+    handleCurrentChange (page) {
       // 当前页
       let sortnum = this.paginations.page_size * (page - 1)
       let table = this.allTableData.filter((item, index) => {
@@ -223,7 +216,7 @@ export default {
         return index < this.paginations.page_size
       })
     },
-    handleSizeChange(page_size) {
+    handleSizeChange (page_size) {
       // 切换size
       this.paginations.page_index = 1
       this.paginations.page_size = page_size
@@ -231,7 +224,7 @@ export default {
         return index < page_size
       })
     },
-    setPaginations() {
+    setPaginations () {
       // 总页数
       this.paginations.total = this.allTableData.length
       this.paginations.page_index = 1
