@@ -13,32 +13,17 @@
         label-width="80px"
       >
         <el-form-item label="用户名" prop="name">
-          <el-input
-            v-model="registerUser.name"
-            placeholder="请输入用户名"
-          ></el-input>
+          <el-input v-model="registerUser.name" placeholder="请输入用户名"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input
-            type="password"
-            v-model="registerUser.password"
-            placeholder="请输入密码"
-          ></el-input>
+          <el-input type="password" v-model="registerUser.password" placeholder="请输入密码"></el-input>
         </el-form-item>
         <el-form-item label="确认密码" prop="password2">
-          <el-input
-            type="password"
-            v-model="registerUser.password2"
-            placeholder="请确认密码"
-          ></el-input>
+          <el-input type="password" v-model="registerUser.password2" placeholder="请确认密码"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button
-            type="primary"
-            class="submit_btn"
-            @click="submitForm('registerForm')"
-            >注册</el-button
-          >
+          <el-button type="primary" class="submit_btn" @click="submitForm('registerForm')">注册</el-button>
+          <router-link class="tiparea" to="/login">返回</router-link>
         </el-form-item>
       </el-form>
     </section>
@@ -48,8 +33,8 @@
 <script>
 export default {
   name: 'register',
-  data() {
-    var validatePass2 = (rule, value, callback) => {
+  data () {
+    const validatePass2 = (rule, value, callback) => {
       if (value !== this.registerUser.password) {
         callback(new Error('两次输入密码不一致!'))
       } else {
@@ -86,7 +71,7 @@ export default {
   },
 
   methods: {
-    submitForm(formName) {
+    submitForm (formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.$axios
@@ -111,6 +96,12 @@ export default {
 
   .registerForm {
     @include bg-form;
+  }
+  .tiparea {
+    float: right;
+    font-size: 12px;
+    color: #333;
+    color: #409eff;
   }
 }
 </style>

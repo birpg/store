@@ -1,24 +1,14 @@
 <template>
-  <div class="home" v-show="!show">
+  <div class="home">
     <div class="breadcrumb">
-      <span>{{ page.title }}</span>
-      <el-button type="text" @click="cancel('form')">返回</el-button>
+      <span class="title">{{ page.title }}</span>
     </div>
 
-    <div class="container">
-      <el-card class="box-card">
+    <el-card class="box-card" shadow="never">
+      <el-form ref="form" :model="form" :rules="form_rules" label-width="100px">
         <h2>基本信息</h2>
-        <hr
-          style="background-color:#e4e4e4;height: 2px;width:997px; border: none;margin:20px auto;"
-        />
-
-        <el-form
-          ref="form"
-          :model="form"
-          :rules="form_rules"
-          label-width="100px"
-          style="width:350px"
-        >
+        <hr />
+        <div style="width:450px">
           <el-form-item prop="coding" label="工号编码:">
             <el-input disabled v-model="form.coding"></el-input>
           </el-form-item>
@@ -27,41 +17,23 @@
             <el-input v-model="form.name"></el-input>
           </el-form-item>
 
-          <el-form-item prop="password" label="登录密码:">
+          <el-form-item v-if="page.option === 'add'" prop="password" label="登录密码:">
             <el-input show-password v-model="form.password"></el-input>
           </el-form-item>
 
           <el-form-item prop="identity" label="账号角色:">
-            <el-select
-              style="width:250px"
-              v-model="form.identity"
-              placeholder="请选择"
-            >
-              <el-option
-                v-for="item of IdentityData"
-                :key="item.index"
-                :value="item.name"
-              >
-              </el-option>
+            <el-select style="width:250px" v-model="form.identity" placeholder="请选择">
+              <el-option v-for="item of IdentityData" :key="item.index" :value="item.name"></el-option>
             </el-select>
           </el-form-item>
+        </div>
 
-          <h2>联系信息</h2>
-          <hr
-            style="background-color:#e4e4e4;height: 2px;width:997px; border: none;margin:20px auto;"
-          />
+        <h2>联系信息</h2>
+        <hr />
+        <div style="width:450px">
           <el-form-item prop="department" label="部门:">
-            <el-select
-              style="width:250px"
-              v-model="form.department"
-              placeholder="请选择"
-            >
-              <el-option
-                v-for="item of DepartmentData"
-                :key="item.index"
-                :value="item.name"
-              >
-              </el-option>
+            <el-select style="width:250px" v-model="form.department" placeholder="请选择">
+              <el-option v-for="item of DepartmentData" :key="item.index" :value="item.name"></el-option>
             </el-select>
           </el-form-item>
 
@@ -70,12 +42,7 @@
           </el-form-item>
 
           <el-form-item prop="tel" label="手机:">
-            <el-input
-              maxlength="11"
-              show-word-limit
-              clearable
-              v-model="form.tel"
-            ></el-input>
+            <el-input maxlength="11" show-word-limit clearable v-model="form.tel"></el-input>
           </el-form-item>
 
           <el-form-item prop="phone" label="电话:">
@@ -98,18 +65,17 @@
           <el-form-item prop="address" label="详细地址:">
             <el-input v-model="form.address"></el-input>
           </el-form-item>
+        </div>
 
-          <h2>其他信息</h2>
-          <hr
-            style="background-color:#e4e4e4;height: 2px;width:997px; border: none;margin:20px auto;"
-          />
-          <el-form-item prop="remarks" label="备注:"
-            ><el-input
+        <h2>其他信息</h2>
+        <hr />
+        <div style="width:450px">
+          <el-form-item prop="remarks" label="备注:">
+            <el-input
               type="textarea"
               :autosize="{ minRows: 6, maxRows: 10 }"
               v-model="form.remarks"
-            >
-            </el-input>
+            ></el-input>
           </el-form-item>
 
           <el-form-item prop="status" label="状态:">
@@ -117,37 +83,28 @@
             <el-radio v-model="form.status" label="disable">禁用</el-radio>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="submitForm('form')"
-              >保存</el-button
-            >
-            <el-button @click="cancel('form')">取消</el-button>
+            <el-button type="primary" @click="submitForm()">保存</el-button>
+            <el-button @click="cancel()">取消</el-button>
           </el-form-item>
-        </el-form>
-      </el-card>
-    </div>
+        </div>
+      </el-form>
+    </el-card>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'personal',
-  props: {
-    show: {
-      type: Boolean,
-      required: true
-    },
-    page: Object,
-    form: Object
-  },
-  data() {
+  name: 'AddAccount',
+  data () {
     return {
-      isShow: this.show,
+      page: {},
+      form: {},
       DepartmentData: [],
       IdentityData: [],
       form_rules: {
         name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
         password: [
-          { required: true, message: '密码不能为空', trigger: 'blur' },
+          { required: false, message: '密码不能为空', trigger: 'blur' },
           { min: 6, max: 30, message: '长度在 6 到 15 个字符', trigger: 'blur' }
         ],
         tel: [{ required: true, message: '请输入手机号', trigger: 'blur' }],
@@ -161,75 +118,51 @@ export default {
       }
     }
   },
-  created() {
-    this.mounted()
+  created () {
+    // 判断新增||修改
+    this.page = this.$route.query
+    if (this.page.option === 'edit') {
+      this.form = JSON.parse(this.page.form)
+    }
+    this.getAll()
   },
   methods: {
-    getDepartment() {
-      return this.$axios.get('/api/department', {
-        showLoading: false
-      })
+    async getDepartment () {
+      const { data: res } = await this.$axios('/api/department')
+      return res
     },
-    getIdentity() {
-      return this.$axios.get('/api/identity', {
-        showLoading: false
-      })
+    async getIdentity () {
+      const { data: res } = await this.$axios('/api/identity')
+      return res
     },
-    mounted() {
-      this.$axios
-        .all([this.getDepartment(), this.getIdentity()])
+    getAll () {
+      this.$axios.all([this.getDepartment(), this.getIdentity()])
         .then(
           this.$axios.spread((department, identity) => {
-            this.DepartmentData = department.data
-            this.IdentityData = identity.data
+            this.DepartmentData = department
+            this.IdentityData = identity
           })
         )
-        .catch(err => {
-          this.$message.error('未查到数据!')
-        })
+        .catch(err => this.$message.error(err.message))
     },
     // 提交用户信息
-    submitForm(form) {
-      this.$refs[form].validate(valid => {
-        if (valid) {
-          const url = this.page.option == 'add' ? 'add' : `edit/${this.form.id}`
+    submitForm () {
+      this.$refs.form.validate(async valid => {
+        if (!valid) return
+        const url = this.page.option == 'add' ? 'add' : `edit/${this.form._id}`
 
-          this.$axios
-            .post(`/api/users/employee/${url}`, this.form)
-            .then(res => {
-              // 操作成功
-              if (this.page.option == 'add') {
-                this.$message({
-                  message: '添加成功！',
-                  type: 'success'
-                })
-              } else {
-                this.$message({
-                  message: '修改成功！',
-                  type: 'success'
-                })
-              }
-              this.$refs.form.resetFields()
-              this.show = !this.isShow
-              this.$emit('update', true)
-            })
-        }
+        const { data: res } = await this.$axios.post(`/api/users/employee/${url}`, this.form)
+        // 操作成功
+        this.$message.success('保存成功！')
+        this.cancel()
       })
     },
     // 取消
-    cancel(form) {
-      this.show = !this.isShow
-      this.$refs[form].resetFields()
-      this.$emit('update', true)
+    cancel () {
+      this.$router.push('/account')
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
-.home {
-  @include breadcrumb;
-
-  @include addContainer;
-}
-</style>
+<style lang="scss" scoped></style>

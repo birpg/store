@@ -4,56 +4,32 @@
       <span>修改密码</span>
     </div>
 
-    <div class="container">
-      <el-card class="box-card">
-        <el-form
-          ref="form"
-          :model="form"
-          :rules="form_rules"
-          label-width="100px"
-          style="width:350px"
-        >
-          <el-form-item prop="password" label="原密码">
-            <el-input
-              v-model="form.password"
-              clearable
-              show-password
-            ></el-input>
-          </el-form-item>
+    <el-card class="box-card" shadow="never">
+      <el-form ref="form" :model="form" :rules="form_rules" label-width="100px" style="width:350px">
+        <el-form-item prop="password" label="原密码">
+          <el-input v-model="form.password" clearable show-password></el-input>
+        </el-form-item>
 
-          <el-form-item prop="pass" label="新密码">
-            <el-input
-              v-model="form.pass"
-              autocomplete="off"
-              clearable
-              show-password
-            ></el-input>
-          </el-form-item>
+        <el-form-item prop="pass" label="新密码">
+          <el-input v-model="form.pass" autocomplete="off" clearable show-password></el-input>
+        </el-form-item>
 
-          <el-form-item prop="checkPass" label="确认新密码">
-            <el-input
-              v-model="form.checkPass"
-              autocomplete="off"
-              clearable
-              show-password
-            ></el-input>
-          </el-form-item>
+        <el-form-item prop="checkPass" label="确认新密码">
+          <el-input v-model="form.checkPass" autocomplete="off" clearable show-password></el-input>
+        </el-form-item>
 
-          <el-form-item>
-            <el-button type="primary" @click="submitForm('form')"
-              >保存</el-button
-            >
-          </el-form-item>
-        </el-form>
-      </el-card>
-    </div>
+        <el-form-item>
+          <el-button type="primary" @click="submitForm()">保存</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
   </div>
 </template>
 
 <script>
 export default {
   name: 'changePwd',
-  data() {
+  data () {
     const validatePass = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入密码'))
@@ -105,8 +81,8 @@ export default {
     }
   },
   methods: {
-    submitForm(form) {
-      this.$refs[form].validate(valid => {
+    submitForm () {
+      this.$refs.form.validate(valid => {
         if (valid) {
           this.$axios
             .post('/api/users/updatePwd', this.form)
@@ -116,7 +92,7 @@ export default {
                 type: 'success'
               })
               setTimeout(() => {
-                localStorage.removeItem('storeToken')
+                sessionStorage.removeItem('storeToken')
                 this.$store.dispatch('clearCurrentState')
 
                 // 页面跳转
@@ -139,8 +115,5 @@ export default {
 <style lang="scss" scoped>
 .home {
   height: 1000px;
-  @include breadcrumb;
-
-  @include addContainer;
 }
 </style>

@@ -1,15 +1,8 @@
+<!-- 左侧菜单组件 -->
 <template>
   <el-row class="menu_page">
     <el-col>
-      <el-menu
-        mode="vertical"
-        unique-opened
-        background-color="#274461"
-        text-color="#fff"
-        active-text-color="#409eff"
-        class="el-menu-vertical-demo"
-        :default-active="defaultActive"
-      >
+      <el-menu mode="vertical" unique-opened background-color="#274461" text-color="#fff" active-text-color="#409eff" class="el-menu-vertical-demo" :default-active="defaultActive">
         <template v-for="item in items">
           <el-submenu v-if="item.children" :index="item.path" :key="item.path">
             <template slot="title">

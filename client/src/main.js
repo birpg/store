@@ -4,21 +4,46 @@ import 'element-ui/lib/theme-chalk/index.css'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import axios from './http'
+import axios from './axios'
 import { message } from './assets/resetMessage'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faUserCircle, faHome, faPowerOff, faArchive, faShoppingCart, faCalculator, faChartArea, faUser, faCalendarAlt } from '@fortawesome/free-solid-svg-icons'
+import {
+  faUserCircle,
+  faHome,
+  faPowerOff,
+  faArchive,
+  faShoppingCart,
+  faCalculator,
+  faChartArea,
+  faUser,
+  faCalendarAlt,
+} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+const Pagination = () => import('./components/Pagination.vue')
+const Search = () => import('./components/Search.vue')
+const DialogTable = () => import('./components/DialogTable.vue')
 
-library.add(faUserCircle, faHome, faPowerOff, faArchive, faShoppingCart, faCalculator, faChartArea, faUser, faCalendarAlt)
+library.add(
+  faUserCircle,
+  faHome,
+  faPowerOff,
+  faArchive,
+  faShoppingCart,
+  faCalculator,
+  faChartArea,
+  faUser,
+  faCalendarAlt
+)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
-
-Vue.config.productionTip = false
+Vue.component('pagination', Pagination)
+Vue.component('search', Search)
+Vue.component('dialog-table', DialogTable)
 
 Vue.prototype.$message = message
 Vue.prototype.$axios = axios
 
+Vue.config.productionTip = false
 
 // 全局时间过滤器
 Vue.filter('dateFormat', originVal => {
@@ -46,5 +71,5 @@ Vue.filter('dateFilter', val => {
 new Vue({
   router,
   store,
-  render: h => h(App)
+  render: h => h(App),
 }).$mount('#app')

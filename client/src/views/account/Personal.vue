@@ -5,19 +5,11 @@
     </div>
 
     <div class="container">
-      <el-card class="box-card">
+      <el-card class="box-card" shadow="never">
         <h2>基本信息</h2>
-        <hr
-          style="background-color:#e4e4e4;height: 2px;width:997px; border: none;margin:20px auto;"
-        />
+        <hr />
 
-        <el-form
-          ref="form"
-          :model="form"
-          :rules="form_rules"
-          label-width="100px"
-          style="width:440px"
-        >
+        <el-form ref="form" :model="form" :rules="form_rules" label-width="100px" style="width:440px">
           <el-form-item prop="coding" label="工号编码:">
             <el-input disabled v-model="form.coding"></el-input>
           </el-form-item>
@@ -32,33 +24,16 @@
           </el-form-item>
 
           <el-form-item prop="identity" label="账号角色:">
-            <el-select
-              disabled
-              style="width:340px"
-              v-model="form.identity"
-              placeholder="请选择"
-            >
-              <el-option value="form.identity"> </el-option>
+            <el-select disabled style="width:340px" v-model="form.identity" placeholder="请选择">
+              <el-option value="form.identity"></el-option>
             </el-select>
           </el-form-item>
 
           <h2>联系信息</h2>
-          <hr
-            style="background-color:#e4e4e4;height: 2px;width:997px; border: none;margin:20px auto;"
-          />
+          <hr />
           <el-form-item prop="department" label="部门:">
-            <el-select
-              disabled
-              style="width:340px"
-              v-model="form.department"
-              placeholder="请选择"
-            >
-              <el-option
-                v-for="item of DepartmentData"
-                :key="item.index"
-                :value="item.name"
-              >
-              </el-option>
+            <el-select disabled style="width:340px" v-model="form.department" placeholder="请选择">
+              <el-option v-for="item of DepartmentData" :key="item.index" :value="item.name"></el-option>
             </el-select>
           </el-form-item>
 
@@ -67,12 +42,7 @@
           </el-form-item>
 
           <el-form-item prop="tel" label="手机:">
-            <el-input
-              maxlength="11"
-              show-word-limit
-              clearable
-              v-model="form.tel"
-            ></el-input>
+            <el-input maxlength="11" show-word-limit clearable v-model="form.tel"></el-input>
           </el-form-item>
 
           <el-form-item prop="phone" label="电话:">
@@ -92,30 +62,17 @@
           </el-form-item>
 
           <h2>其他信息</h2>
-          <hr
-            style="background-color:#e4e4e4;height: 2px;width:997px; border: none;margin:20px auto;"
-          />
-          <el-form-item prop="remarks" label="备注:"
-            ><el-input
-              type="textarea"
-              :autosize="{ minRows: 6, maxRows: 10 }"
-              v-model="form.remarks"
-            >
-            </el-input>
+          <hr />
+          <el-form-item prop="remarks" label="备注:">
+            <el-input type="textarea" :autosize="{ minRows: 6, maxRows: 10 }" v-model="form.remarks"></el-input>
           </el-form-item>
 
           <el-form-item prop="status" label="状态:">
-            <el-radio v-model="form.status" disabled label="enable"
-              >启用</el-radio
-            >
-            <el-radio v-model="form.status" disabled label="disable"
-              >禁用</el-radio
-            >
+            <el-radio v-model="form.status" disabled label="enable">启用</el-radio>
+            <el-radio v-model="form.status" disabled label="disable">禁用</el-radio>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="submitForm('form')"
-              >保存</el-button
-            >
+            <el-button type="primary" @click="submitForm()">保存</el-button>
           </el-form-item>
         </el-form>
       </el-card>
@@ -126,7 +83,7 @@
 <script>
 export default {
   name: 'personal',
-  data() {
+  data () {
     return {
       form: {
         coding: '',
@@ -149,19 +106,19 @@ export default {
       }
     }
   },
-  created() {
+  created () {
     this.getProfile()
     this.getDepartment()
   },
   methods: {
     // 获取当前用户信息
-    getProfile() {
+    getProfile () {
       this.$axios.get('/api/users/current').then(res => {
         this.form = res.data
       })
     },
     // 获取部门信息
-    getDepartment() {
+    getDepartment () {
       this.$axios
         .get('/api/department', {
           showLoading: false
@@ -171,8 +128,8 @@ export default {
         })
     },
     // 更新用户信息
-    submitForm(form) {
-      this.$refs[form].validate(valid => {
+    submitForm () {
+      this.$refs.form.validate(valid => {
         if (valid) {
           const url = `edit/${this.$store.getters.user.id}`
 
@@ -193,8 +150,5 @@ export default {
 
 <style lang="scss" scoped>
 .home {
-  @include breadcrumb;
-
-  @include addContainer;
 }
 </style>

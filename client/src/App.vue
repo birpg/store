@@ -10,8 +10,8 @@ export default {
   name: 'app',
   componets: {},
   created() {
-    if (localStorage.storeToken) {
-      const decoded = jwt_decode(localStorage.storeToken)
+    if (sessionStorage.storeToken) {
+      const decoded = jwt_decode(sessionStorage.storeToken)
       // token存储到vuex中
       this.$store.dispatch('setIsAuthenticated', !this.isEmpty(decoded))
       this.$store.dispatch('setUser', decoded)
@@ -25,17 +25,48 @@ export default {
         (typeof value === 'object' && Object.keys(value).length === 0) ||
         (typeof value === 'string' && value.trim().length === 0)
       )
-    }
-  }
+    },
+  },
 }
 </script>
 
-<style>
+<style lang="scss">
 html,
 body,
 #app {
-  width: 100%;
   height: 100%;
   background-color: #f2f2f2;
+}
+
+// 面包屑
+.breadcrumb {
+  padding: 20px;
+  background-color: #fff;
+
+  .title {
+    border-left: 3px solid $title-color;
+    padding-left: 10px;
+  }
+}
+
+hr {
+  background-color: #e4e4e4;
+  height: 2px;
+  border: none;
+  margin: 20px auto;
+}
+
+.box-card {
+  margin: 20px;
+
+  .ser_add {
+    overflow: hidden;
+    margin-bottom: 20px;
+    width: 100%;
+
+    .btnRight {
+      float: right;
+    }
+  }
 }
 </style>

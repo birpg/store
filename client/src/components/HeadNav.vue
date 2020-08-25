@@ -1,3 +1,4 @@
+<!-- 头部组件 -->
 <template>
   <header class="head-nav">
     <el-row>
@@ -39,7 +40,7 @@ export default {
     },
     logout () {
       // 清除token
-      localStorage.removeItem('storeToken')
+      sessionStorage.removeItem('storeToken')
       this.$store.dispatch('clearCurrentState')
 
       // 页面跳转
@@ -69,7 +70,7 @@ export default {
   .title {
     width: 300px;
     font-size: 22px;
-    font-family: 'Microsoft YaHei';
+    font-family: "Microsoft YaHei";
     padding-left: 20px;
     letter-spacing: 3px;
   }

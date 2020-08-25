@@ -1,355 +1,216 @@
 <template>
-  <div class="home" v-show="!show">
+  <div class="home">
     <div class="breadcrumb">
-      <span>{{ page.title }}</span>
-      <el-button type="text" @click="cancel()">返回</el-button>
+      <span class="title">{{ this.$route.query.title }}</span>
     </div>
 
-    <div class="container">
-      <el-card class="box-card">
-        <div class="btn">
-          <el-button
-            class="choose"
-            size="small"
-            type="primary"
-            @click="addCommodity()"
-            >选择商品</el-button
-          >
-        </div>
+    <el-card class="box-card" shadow="never">
+      <div class="ser_add">
+        <el-button class="btnRight" type="primary" @click="addPubrchase()">选择商品</el-button>
+      </div>
 
-        <!-- 表单 -->
-        <el-form
-          ref="form"
-          :model="form"
-          :inline="true"
-          :rules="form_rules"
-          label-width="100px"
-        >
-          <div>
-            <el-form-item prop="purchaseNumber" label="采购单号:">
-              <el-input
-                suffix-icon="xxx"
-                v-model="form.purchaseNumber"
-              ></el-input>
-            </el-form-item>
-            <el-form-item prop="audit" label="审核状态:">
-              <el-select v-model="form.audit" placeholder="请选择">
-                <el-option
-                  v-for="item in audit"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                >
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item prop="store" label="采购门店:">
-              <el-input suffix-icon="xxx" v-model="form.store"></el-input>
-            </el-form-item>
-          </div>
+      <!-- 表单 -->
+      <el-form ref="form" :model="form" :inline="true" :rules="form_rules" label-width="100px">
+        <el-form-item prop="purchaseNumber" label="采购单号:">
+          <el-input suffix-icon="xxx" v-model="form.purchaseNumber"></el-input>
+        </el-form-item>
+        <el-form-item prop="audit" label="审核状态:">
+          <el-select v-model="form.audit" placeholder="请选择">
+            <el-option label="未审核" value="未审核"></el-option>
+            <el-option label="已审核" value="已审核"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="store" label="采购门店:">
+          <el-input suffix-icon="xxx" v-model="form.store"></el-input>
+        </el-form-item>
 
-          <div>
-            <el-form-item prop="supplier" label="供应商:">
-              <el-select v-model="form.supplier" placeholder="请选择供应商">
-                <el-option
-                  v-for="item in options"
-                  :key="item._id"
-                  :label="item.supplierName"
-                  :value="item.supplierName"
-                  :disabled="!JSON.parse(item.status)"
-                >
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item prop="personnel" label="采购人员:">
-              <el-input suffix-icon="xxx" v-model="form.personnel"></el-input>
-            </el-form-item>
+        <el-form-item prop="supplier" label="供应商:">
+          <el-select v-model="form.supplier" placeholder="请选择供应商">
+            <el-option v-for="item in options" :key="item._id" :label="item.supplierName" :value="item.supplierName" :disabled="!JSON.parse(item.status)"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="personnel" label="采购人员:">
+          <el-input suffix-icon="xxx" v-model="form.personnel"></el-input>
+        </el-form-item>
 
-            <el-form-item prop="remarks" label="备注:">
-              <el-input suffix-icon="xxx" v-model="form.remarks"></el-input>
-            </el-form-item>
-          </div>
+        <el-form-item prop="remarks" label="备注:">
+          <el-input suffix-icon="xxx" v-model="form.remarks"></el-input>
+        </el-form-item>
+        <el-form-item prop="ordrMakingStf" label="制单人员:">
+          <el-input suffix-icon="xxx" v-model="form.ordrMakingStf"></el-input>
+        </el-form-item>
 
-          <!-- 表格 -->
-          <el-table
-            :header-cell-style="{ background: '#f2f2f2', color: '#606266' }"
-            :data="form.table"
-            border
-            :summary-method="getSummaries"
-            show-summary
-            max-height="450"
-            style="width: 100%"
-          >
-            <el-table-column
-              type="index"
-              align="center"
-              label="序号"
-              width="50"
-            >
-            </el-table-column>
+        <el-form-item prop="auditors" label="审核人员:">
+          <el-input suffix-icon="xxx" v-model="form.auditors"></el-input>
+        </el-form-item>
 
-            <el-table-column
-              prop="coding"
-              align="center"
-              label="编码"
-              width="150"
-            >
-              <template v-slot="scope">
-                <span>{{ scope.row.coding }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="name"
-              align="center"
-              label="商品名称"
-              width="250"
-            >
-              <template v-slot="scope">
-                <span>{{ scope.row.name }}</span>
-              </template>
-            </el-table-column>
+        <el-form-item prop="date" label="制单日期:">
+          <span v-if="this.$route.query.option == 'edit'">
+            {{ form.date | dateFormat }}
+          </span>
+        </el-form-item>
 
-            <el-table-column
-              prop="unit"
-              align="center"
-              label="单位"
-              width="100"
-            >
-              <template v-slot="scope">
-                <span>{{ scope.row.unit }}</span>
-              </template>
-            </el-table-column>
+        <!-- 表格 -->
+        <el-table :header-cell-style="{ background: '#f2f2f2', color: '#606266' }" :data="form.table" border :summary-method="getSummaries" show-summary max-height="450">
+          <el-table-column type="index" align="center" label="序号" width="50"></el-table-column>
 
-            <el-table-column
-              prop="number"
-              align="center"
-              label="采购数量"
-              width="120"
-            >
-              <template v-slot="scope">
-                <el-input
-                  @input="num()"
-                  clearable
-                  v-model="scope.row.number"
-                ></el-input>
-              </template>
-            </el-table-column>
+          <el-table-column prop="coding" align="center" label="编码" min-width="150">
+            <template v-slot="scope">
+              <span>{{ scope.row.coding }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="name" align="center" label="商品名称" min-width="250">
+            <template v-slot="scope">
+              <span>{{ scope.row.name }}</span>
+            </template>
+          </el-table-column>
 
-            <el-table-column
-              prop="cost"
-              align="center"
-              label="采购单价"
-              width="120"
-            >
-              <template v-slot="scope">
-                <span>{{ scope.row.cost }}</span>
-              </template>
-            </el-table-column>
+          <el-table-column prop="unit" align="center" label="单位" min-width="100">
+            <template v-slot="scope">
+              <span>{{ scope.row.unit }}</span>
+            </template>
+          </el-table-column>
 
-            <el-table-column
-              prop="subtotal"
-              align="center"
-              label="小计金额"
-              width="120"
-            >
-              <template v-slot="scope">
-                <span>{{ scope.row.subtotal }}</span>
-              </template>
-            </el-table-column>
+          <el-table-column prop="number" align="center" label="采购数量" min-width="120">
+            <template v-slot="scope">
+              <el-input @input="num()" clearable v-model="scope.row.number"></el-input>
+            </template>
+          </el-table-column>
 
-            <el-table-column
-              prop="operation"
-              align="center"
-              label="操作"
-              fixed="right"
-              width="80"
-            >
-              <template v-slot="scope">
-                <el-button
-                  type="text"
-                  icon="delete"
-                  size="small"
-                  @click.native.prevent="
-                    onDeletePurchase(scope.$index, form.table)
-                  "
-                  >删除</el-button
-                >
-              </template>
-            </el-table-column>
-          </el-table>
+          <el-table-column prop="cost" align="center" label="采购单价" min-width="120">
+            <template v-slot="scope">
+              <span>{{ scope.row.cost }}</span>
+            </template>
+          </el-table-column>
 
-          <!-- 分页 -->
-          <el-row>
-            <el-col :span="24">
-              <div class="pagination">
-                <el-pagination
-                  v-if="paginations.total > 0"
-                  :page-sizes="paginations.page_sizes"
-                  :page-size="paginations.page_size"
-                  :layout="paginations.layout"
-                  :total="paginations.total"
-                  :current-page.sync="paginations.page_index"
-                  @current-change="handleCurrentChange"
-                  @size-change="handleSizeChange"
-                >
-                </el-pagination>
-              </div>
-            </el-col>
-          </el-row>
+          <el-table-column prop="subtotal" align="center" label="小计金额" min-width="120">
+            <template v-slot="scope">
+              <span>{{ scope.row.subtotal }}</span>
+            </template>
+          </el-table-column>
 
-          <div class="foot">
-            <el-form-item prop="ordrMakingStf" label="制单人员:">
-              <el-input
-                suffix-icon="xxx"
-                v-model="form.ordrMakingStf"
-              ></el-input>
-            </el-form-item>
+          <el-table-column prop="operation" align="center" label="操作" min-width="80" fixed="right">
+            <template v-slot="scope">
+              <el-button type="text" icon="delete" size="small" @click.native.prevent="
+                  onDeletePurchase(scope.$index, form.table)
+                ">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
 
-            <el-form-item prop="auditors" label="审核人员:">
-              <el-input suffix-icon="xxx" v-model="form.auditors"></el-input>
-            </el-form-item>
+        <!-- 分页 -->
+        <pagination ref="pagination" @updata="handleTable($event)"></pagination>
 
-            <el-form-item prop="date" label="制单日期:">
-              <span v-if="this.page.option == 'edit'">{{
-                form.date | dateFormat
-              }}</span>
-            </el-form-item>
-          </div>
-
-          <el-form-item>
-            <el-button type="primary" @click="submitForm('form')"
-              >保存</el-button
-            >
-            <el-button @click="cancel()">取消</el-button>
-          </el-form-item>
-        </el-form>
-      </el-card>
-    </div>
+        <el-form-item class="btn">
+          <el-button type="primary" @click="submitForm()">保存</el-button>
+          <el-button @click="cancel()">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
 
     <!-- 弹框页面 -->
-    <DialogPurchase
-      :dialogShow="dialogShow"
-      :delTab="selectedId"
-      @update="handle($event)"
-    ></DialogPurchase>
+    <dialog-table v-if="dialogShow.show" :selectedId="selectedId" :dialogShow="dialogShow" @update="handle($event)"></dialog-table>
   </div>
 </template>
 
 <script>
-const DialogPurchase = () => import('./DialogPurchase')
 export default {
-  name: 'addSupplier',
-  props: {
-    show: {
-      type: Boolean,
-      required: true
-    },
-    page: Object,
-    form: Object
-  },
-  data() {
+  name: 'AddPurchase',
+  data () {
     return {
+      form: {},
       allTableData: [],
       options: [],
-      selectedId: [],
-      audit: [
-        {
-          value: '未审核',
-          label: '未审核'
-        },
-        {
-          value: '已审核',
-          label: '已审核'
-        }
-      ],
       dialogShow: {
         show: false,
-        title: ''
+        title: '',
       },
-      isShow: this.show,
+      selectedId: [],
       form_rules: {
         purchaseNumber: [
-          { required: true, message: '请输入采购单号', trigger: 'blur' }
+          { required: true, message: '请输入采购单号', trigger: 'blur' },
         ],
         audit: [
-          { required: true, message: '请选择审核状态', trigger: 'change' }
+          { required: true, message: '请选择审核状态', trigger: 'change' },
         ],
         store: [{ required: true, message: '请输入采购门店', trigger: 'blur' }],
         supplier: [
-          { required: true, message: '请选择供应商', trigger: 'blur' }
+          { required: true, message: '请选择供应商', trigger: 'blur' },
         ],
         personnel: [
-          { required: true, message: '请输入采购人员姓名', trigger: 'change' }
+          { required: true, message: '请输入采购人员姓名', trigger: 'change' },
         ],
         ordrMakingStf: [
           {
             required: true,
             message: '制单人员姓名',
-            trigger: 'blur'
-          }
-        ]
+            trigger: 'blur',
+          },
+        ],
       },
-      //需要给分页组件传的信息
-      paginations: {
-        page_index: 1, // 当前位于哪页
-        total: 0, // 总数
-        page_size: 5, // 1页显示多少条
-        page_sizes: [5, 10, 15, 20], //每页显示多少条
-        layout: 'total, sizes, prev, pager, next, jumper' // 翻页属性
-      }
     }
   },
-  components: {
-    DialogPurchase
-  },
-  created() {
-    this.getProfile()
-    // 默认未审核
-    this.form.audit = this.audit[0].value
+  created () {
+    this.getSupplier()
+    if (this.$route.query.option === 'edit') return this.getProfile()
   },
   methods: {
+    // 获取供应商数据
+    async getSupplier () {
+      const { data: res } = await this.$axios('/api/supplier')
+      this.options = res
+    },
+    // 请求数据
+    async getProfile () {
+      const { data: res } = await this.$axios(`/api/purchase/${this.$route.query.id}`)
+      this.form = res
+      this.allTableData = res.table
+      this.setPagination(this.form.table)
+    },
+    // 设置分页数据
+    setPagination (val) {
+      this.$refs.pagination.setPaginations(val)
+    },
+    // 接收分页组件处理后的数据
+    handleTable (val) {
+      this.form.table = val
+    },
     // 获取选中数据的id
-    mounted() {
+    getId () {
+      // 清空拿最新的id
       this.selectedId = []
-      for (let item of this.form.table) {
+      for (let item of this.allTableData) {
         this.selectedId.push(item._id)
       }
     },
+    // 接收弹框传递的选中数据
+    handle (val) {
+      this.allTableData = val
+      this.setPagination(val)
+    },
     // 监听商品数量
-    num() {
+    num () {
       let arr = this.form.table
       for (let index in arr) {
         arr[index].subtotal = arr[index].number * arr[index].cost
       }
     },
-    // 获取供应商数据
-    getProfile() {
-      this.$axios('/api/supplier', {
-        showLoading: false
-      }).then(res => {
-        this.options = res.data
-      })
-    },
     // 添加
-    addCommodity() {
-      this.mounted()
+    addPubrchase () {
+      // 获取选中数据的id
+      this.getId()
       this.dialogShow = {
         show: true,
-        title: '选择商品'
+        title: '选择商品',
       }
     },
     // 删除
-    onDeletePurchase(index, rows) {
+    onDeleteStorage (index, rows) {
       rows.splice(index, 1)
       this.allTableData.splice(index, 1)
     },
-    // 接收弹框传递的选中数据
-    handle(val) {
-      this.allTableData = val
-      this.setPaginations()
-    },
     // 自定义合计逻辑
-    getSummaries(param) {
+    getSummaries (param) {
       const { columns, data } = param
       const sums = []
       columns.forEach((column, index) => {
@@ -383,82 +244,34 @@ export default {
       return sums
     },
     // 提交
-    submitForm(form) {
-      this.$refs[form].validate(valid => {
-        if (valid) {
-          //表单数据验证完成之后，提交数据
-          const url = this.page.option == 'add' ? 'add' : `edit/${this.form.id}`
+    submitForm () {
+      this.$refs.form.validate(async valid => {
+        if (!valid) return
+        this.form.table = this.allTableData
+        //表单数据验证完成之后，提交数据
+        const url =
+          this.$route.query.option === 'add' ? 'add' : `edit/${this.form._id}`
 
-          this.$axios
-            .post(`/api/purchase/${url}`, this.form)
-            .then(res => {
-              // 操作成功
-              this.$message({
-                message: '保存成功！',
-                type: 'success'
-              })
-              this.$refs.form.resetFields()
-              this.show = !this.isShow
-              this.$emit('update', true)
-            })
-        }
+        const { data: res } = await this.$axios.post(
+          `/api/purchase/${url}`,
+          this.form
+        )
+        // 操作成功
+        this.$message.success('保存成功！')
+        this.cancel()
       })
     },
     // 取消
-    cancel() {
-      this.show = !this.isShow
-      this.$emit('update', true)
+    cancel () {
+      this.$router.push('/purchase')
     },
-    handleCurrentChange(page) {
-      // 当前页
-      let sortnum = this.paginations.page_size * (page - 1)
-      let table = this.allTableData.filter((item, index) => {
-        return index >= sortnum
-      })
-      // 设置默认分页数据
-      this.form.table = table.filter((item, index) => {
-        return index < this.paginations.page_size
-      })
-    },
-    handleSizeChange(page_size) {
-      // 切换size
-      this.paginations.page_index = 1
-      this.paginations.page_size = page_size
-      this.form.table = this.allTableData.filter((item, index) => {
-        return index < page_size
-      })
-    },
-    setPaginations() {
-      // 总页数
-      this.paginations.total = this.allTableData.length
-      this.paginations.page_index = 1
-      this.paginations.page_size = 5
-      // 设置默认分页数据
-      this.form.table = this.allTableData.filter((item, index) => {
-        return index < this.paginations.page_size
-      })
-    }
-  }
+  },
 }
 </script>
 
 <style lang="scss" scoped>
-.home {
-  @include breadcrumb;
-  @include pagination;
-
-  .btn {
-    overflow: hidden;
-    padding-bottom: 20px;
-
-    .choose {
-      float: right;
-    }
-  }
-
-  @include addContainer;
-  .foot {
-    padding: 20px 0;
-  }
+.btn {
+  float: right;
+  margin-top: 20px;
 }
 </style>

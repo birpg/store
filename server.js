@@ -1,9 +1,9 @@
 const express = require('express')
-var app = express()
+const app = express()
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const passport = require('passport')
-var compression = require('compression')
+const compression = require('compression')
 
 app.use(compression())
 
@@ -14,7 +14,7 @@ const db = require('./config/keys').mongoURI
 mongoose
   .connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB Connected'))
-  .catch(err => console.log(err))
+  .catch((err) => console.log(err))
 
 mongoose.set('useFindAndModify', false)
 
@@ -53,7 +53,6 @@ app.use('/api/identity', identity)
 app.use('/api/storage', storage)
 app.use('/api/outbound', outbound)
 app.use('/api/order', order)
-
 
 const port = process.env.PORT || 5000
 

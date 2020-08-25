@@ -7,32 +7,27 @@
       :close-on-press-escape="false"
       :modal-append-to-body="false"
       :destroy-on-close="true"
+      @close="closeDialog"
     >
       <div class="form">
         <el-form
           ref="form"
-          :model="form"
+          :model="dialog.form"
           :rules="form_rules"
           label-width="120px"
           style="margin:10px;width:auto;"
         >
           <el-form-item prop="coding" label="编码:">
-            <el-input type="coding" v-model="form.coding"></el-input>
+            <el-input type="coding" v-model="dialog.form.coding"></el-input>
           </el-form-item>
 
           <el-form-item prop="name" label="名称:">
-            <el-input
-              type="name"
-              v-model="form.name"
-              @keyup.enter.native="submitForm('form')"
-            ></el-input>
+            <el-input type="name" v-model="dialog.form.name" @keyup.enter.native="submitForm()"></el-input>
           </el-form-item>
 
           <el-form-item class="text_right">
-            <el-button @click="dialog.show = false">取 消</el-button>
-            <el-button type="primary" @click="submitForm('form')"
-              >保 存</el-button
-            >
+            <el-button @click="closeDialog">取 消</el-button>
+            <el-button type="primary" @click="submitForm()">保 存</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -44,10 +39,9 @@
 export default {
   name: 'logDepartment',
   props: {
-    dialog: Object,
-    form: Object
+    dialog: Object
   },
-  data() {
+  data () {
     return {
       form_rules: {
         coding: [
@@ -59,30 +53,22 @@ export default {
   },
 
   methods: {
-    submitForm(form) {
-      this.$refs[form].validate(valid => {
-        if (valid) {
-          //表单数据验证完成之后，提交数据
-          const url =
-            this.dialog.option == 'add' ? 'add' : `edit/${this.form.id}`
+    submitForm () {
+      this.$refs.form.validate(async valid => {
+        if (!valid) return
+        const url =
+          this.dialog.option == 'add' ? 'add' : `edit/${this.dialog.form._id}`
 
-          this.$axios.post(`/api/identity/${url}`, this.form).then(res => {
-            // 操作成功
-            this.$message({
-              message: '保存成功！',
-              type: 'success'
-            })
-            if (this.dialog.option === 'edit') {
-              this.dialog.show = false
-              this.$emit('update')
-            } else {
-              this.$refs.form.resetFields()
-              this.dialog.show = true
-              this.$emit('update')
-            }
-          })
-        }
+        const { data: res } = await this.$axios.post(`/api/identity/${url}`, this.dialog.form)
+        // 操作成功
+        this.$message.success('保存成功！')
+        this.dialog.show = false
+        this.$emit('update')
       })
+    },
+    closeDialog () {
+      this.$refs.form.resetFields()
+      this.dialog.show = false
     }
   }
 }

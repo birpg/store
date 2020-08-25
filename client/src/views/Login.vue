@@ -23,19 +23,19 @@
             type="password"
             v-model="loginUser.password"
             placeholder="请输入密码"
-            @keyup.enter.native="submitForm('loginForm')"
+            @keyup.enter.native="login()"
           ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button
-            type="primary"
-            class="submit_btn"
-            @click="submitForm('loginForm')"
+          <el-button type="primary" class="submit_btn" @click="login()"
             >登录</el-button
           >
         </el-form-item>
         <div class="tiparea">
-          <p>还没有账号？现在<router-link to="/register">注册</router-link></p>
+          <p>
+            还没有账号？现在
+            <router-link to="/register">注册</router-link>
+          </p>
         </div>
       </el-form>
     </section>
@@ -45,57 +45,55 @@
 <script>
 import jwt_decode from 'jwt-decode'
 export default {
-  name: 'login',
+  name: 'Login',
   data() {
     return {
       loginUser: {
-        name: '',
-        password: ''
+        name: 'admin',
+        password: '123123',
       },
-      options: [
-        {
-          value: 'manager',
-          label: '管理员'
-        },
-        {
-          value: 'employee',
-          label: '员工'
-        }
-      ],
       rules: {
         name: [
           { required: true, message: '用户名不能为空', trigger: 'blur' },
-          { min: 2, max: 30, message: '长度在 2 到 30 个字符', trigger: 'blur' }
+          {
+            min: 2,
+            max: 30,
+            message: '长度在 2 到 30 个字符',
+            trigger: 'blur',
+          },
         ],
         password: [
           { required: true, message: '密码不能为空', trigger: 'blur' },
-          { min: 6, max: 30, message: '长度在 6 到 30 个字符', trigger: 'blur' }
-        ]
-      }
+          {
+            min: 6,
+            max: 30,
+            message: '长度在 6 到 30 个字符',
+            trigger: 'blur',
+          },
+        ],
+      },
     }
   },
   methods: {
-    submitForm(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          this.$axios.post('/api/users/login', this.loginUser).then(res => {
-            const { token } = res.data
-            localStorage.setItem('storeToken', token)
+    login() {
+      this.$refs.loginForm.validate(async valid => {
+        if (!valid) return
 
-            // 解析token
-            const decoded = jwt_decode(token)
+        const { data: res } = await this.$axios.post(
+          '/api/users/login',
+          this.loginUser
+        )
+        const { token } = res
+        sessionStorage.setItem('storeToken', token)
 
-            // token存到vuex中
-            this.$store.dispatch('setIsAuthenticated', !this.isEmpty(decoded))
-            this.$store.dispatch('setUser', decoded)
-            // 弹窗提示
-            this.$message({
-              message: '登录成功!',
-              type: 'success'
-            })
-            this.$router.push('/index')
-          })
-        }
+        // 解析token
+        const decoded = jwt_decode(token)
+
+        // token存到vuex中
+        this.$store.dispatch('setIsAuthenticated', !this.isEmpty(decoded))
+        this.$store.dispatch('setUser', decoded)
+        // 弹窗提示
+        this.$message.success('登录成功!'), this.$router.push('/index')
       })
     },
     isEmpty(value) {
@@ -105,11 +103,10 @@ export default {
         (typeof value === 'object' && Object.keys(value).length === 0) ||
         (typeof value === 'string' && value.trim().length === 0)
       )
-    }
-  }
+    },
+  },
 }
 </script>
-
 
 <style lang="scss" scoped>
 .login {

@@ -26,8 +26,7 @@ import {
   Checkbox,
   CheckboxGroup,
   TabPane,
-  Tabs
-
+  Tabs,
 } from 'element-ui'
 
 Vue.use(Button)
@@ -57,4 +56,3 @@ Vue.use(Checkbox)
 Vue.use(CheckboxGroup)
 Vue.use(TabPane)
 Vue.use(Tabs)
-
