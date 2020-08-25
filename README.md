@@ -13,7 +13,7 @@ node.js + express + mongoose + vue 全家桶 + ES6 + sass + axios + element-ui
 > 下载依赖项: store 目录下运行 `npm install`, 安装完成后再次运行 `cd client` 和 `npm install`安装依赖
 >
 > 运行: 在 store 目录下 `npm run dev` 即可启动前后端
-> 访问: http://localhost:8080/ 
+> 访问: http://localhost:8080/
 
 ## 效果演示
 
@@ -25,7 +25,7 @@ node.js + express + mongoose + vue 全家桶 + ES6 + sass + axios + element-ui
 store
 ├── client                                前端文件
 │   ├── public                              静态资源目录
-│   │   ├── css     
+│   │   ├── css
 │   │   │   └── reset.css                       初始化css
 │   │   ├── favicon.ico                         标签图标
 │   │   └── index.html                          首页入口文件
@@ -42,9 +42,9 @@ store
 │   │   │   │   ├── DialogDepartment.vue          新增部门
 │   │   │   │   └── DialogIdentity.vue            新增身份
 │   │   │   ├── commodity                       商品
-│   │   │   │   ├── AddFile.vue                   新增商品档案             
+│   │   │   │   ├── AddFile.vue                   新增商品档案
 │   │   │   │   ├── DialogBrand.vue               新增商品品牌
-│   │   │   │   ├── DialogCate.vue                新增商品类别          
+│   │   │   │   ├── DialogCate.vue                新增商品类别
 │   │   │   │   └── DialogUnit.vue                新增商品单位
 │   │   │   ├── inventory                       库存
 │   │   │   │   ├── AddOutBound.vue               新增出库单
@@ -62,12 +62,12 @@ store
 │   │   ├── plugins                           插件目录
 │   │   │   └── element.js                      element按需引入模块
 │   │   ├── router                            前端路由
-│   │   │   └── index.js                         
+│   │   │   └── index.js
 │   │   ├── store                             Vuex
-│   │   │   └── index.js                         
+│   │   │   └── index.js
 │   │   ├── views                             页面组件目录
 │   │   │   ├── account                           账号
-│   │   │   │   ├── Account.vue                     员工账号 
+│   │   │   │   ├── Account.vue                     员工账号
 │   │   │   │   ├── ChangePwd.vue                   修改密码
 │   │   │   │   ├── Department.vue                  部门设置
 │   │   │   │   ├── Identity.vue                    身份管理
@@ -89,7 +89,7 @@ store
 │   │   │   ├── Home.vue                        首页
 │   │   │   ├── Index.vue                       main容器
 │   │   │   ├── Login.vue                       登录页面
-│   │   │   └── Register.vue                    注册页面 
+│   │   │   └── Register.vue                    注册页面
 │   │   ├── App.vue                           根组件
 │   │   ├── axios.js                          封装axios
 │   │   └── main.js                           入口文件
@@ -101,6 +101,7 @@ store
 │   └── vue.config.js                       vue配置文件
 |
 |-------------------------以下为后端部分-------------------------|
+|
 ├── config                                  项目配置
 │   ├── keys.js                               连接数据库
 │   └── passport.js                           验证 token
@@ -118,7 +119,7 @@ store
 │   │   └── Storage.js                          商品入库信息模型
 │   ├── promotion                             促销
 │   │   └── Order.js                            订单促销信息模型
-│   ├── purchase                              采购  
+│   ├── purchase                              采购
 │   │   ├── Purchase.js                         采购单信息模型
 │   │   └── Supplier.js                         供应商信息模型
 │   └── Users.js                                用户信息模型
@@ -142,4 +143,3 @@ store
 ├── README.md                               项目的说明文档
 └── server.js                               基础配置
 ```
-
