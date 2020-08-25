@@ -132,7 +132,6 @@ const router = new VueRouter({
   routes,
 })
 
-// 路由守卫
 router.beforeEach((to, from, next) => {
   const isLogin = sessionStorage.storeToken ? true : false
   if (to.path == '/login' || to.path == '/register') {
