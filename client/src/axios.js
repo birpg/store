@@ -32,7 +32,7 @@ axios.interceptors.request.use(
   }
 )
 
-// 响应拦截,401 token过期处理
+// 响应拦截 401 token过期处理
 axios.interceptors.response.use(
   response => {
     endLoading()
