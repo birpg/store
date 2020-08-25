@@ -18,6 +18,7 @@ import {
   faUser,
   faCalendarAlt,
 } from '@fortawesome/free-solid-svg-icons'
+
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 const Pagination = () => import('./components/Pagination.vue')
 const Search = () => import('./components/Search.vue')
