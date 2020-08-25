@@ -9,6 +9,7 @@ const Supplier = require('../../models/purchase/Supplier')
  * @desc 新增供应商信息接口
  * @access private
  */
+
 router.post(
   '/add',
   passport.authenticate('jwt', { session: false }),
@@ -30,7 +31,7 @@ router.post(
     if (req.body.remarks) supplierFields.remarks = req.body.remarks
     if (req.body.status) supplierFields.status = req.body.status
 
-    new Supplier(supplierFields).save().then((supplier) => {
+    new Supplier(supplierFields).save().then(supplier => {
       res.json(supplier)
     })
   }
@@ -46,13 +47,13 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     Supplier.find()
-      .then((supplier) => {
+      .then(supplier => {
         if (!supplier) {
           return res.status(404).json('没有任何内容')
         }
         res.json(supplier)
       })
-      .catch((err) => res.status(404).json(err))
+      .catch(err => res.status(404).json(err))
   }
 )
 
@@ -66,13 +67,13 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     Supplier.find({ _id: req.params.id })
-      .then((supplier) => {
+      .then(supplier => {
         if (!supplier) {
           return res.status(404).json('没有任何内容')
         }
         res.json(supplier)
       })
-      .catch((err) => res.status(404).json(err))
+      .catch(err => res.status(404).json(err))
   }
 )
 
@@ -106,7 +107,7 @@ router.post(
       { _id: req.params.id },
       { $set: supplierFields },
       { new: true }
-    ).then((supplier) => res.json(supplier))
+    ).then(supplier => res.json(supplier))
   }
 )
 
@@ -120,8 +121,8 @@ router.delete(
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     Supplier.findOneAndRemove({ _id: req.params.id })
-      .then((supplier) => res.json(supplier))
-      .catch((err) => res.status(404).json('删除失败!'))
+      .then(supplier => res.json(supplier))
+      .catch(err => res.status(404).json('删除失败!'))
   }
 )
 

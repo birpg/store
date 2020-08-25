@@ -9,6 +9,7 @@ const OutBound = require('../../models/inventory/OutBound')
  * @desc 新增出库信息接口
  * @access private
  */
+
 router.post(
   '/add',
   passport.authenticate('jwt', { session: false }),

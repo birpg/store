@@ -9,6 +9,7 @@ const Category = require('../../models/commodity/Category')
  * @desc 新增类别信息接口
  * @access private
  */
+
 router.post(
   '/add',
   passport.authenticate('jwt', { session: false }),
@@ -19,7 +20,7 @@ router.post(
     if (req.body.name) categoryFields.name = req.body.name
     if (req.body.sort) categoryFields.sort = req.body.sort
 
-    new Category(categoryFields).save().then((category) => {
+    new Category(categoryFields).save().then(category => {
       res.json(category)
     })
   }
@@ -35,13 +36,13 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     Category.find()
-      .then((category) => {
+      .then(category => {
         if (!category) {
           return res.status(404).json('没有任何内容')
         }
         res.json(category)
       })
-      .catch((err) => res.status(404).json(err))
+      .catch(err => res.status(404).json(err))
   }
 )
 
@@ -55,13 +56,13 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     Category.find({ _id: req.params.id })
-      .then((category) => {
+      .then(category => {
         if (!category) {
           return res.status(404).json('没有任何内容')
         }
         res.json(category)
       })
-      .catch((err) => res.status(404).json(err))
+      .catch(err => res.status(404).json(err))
   }
 )
 
@@ -83,7 +84,7 @@ router.post(
       { _id: req.params.id },
       { $set: categoryFields },
       { new: true }
-    ).then((category) => res.json(category))
+    ).then(category => res.json(category))
   }
 )
 
@@ -97,8 +98,8 @@ router.delete(
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     Category.findOneAndRemove({ _id: req.params.id })
-      .then((category) => res.json(category))
-      .catch((err) => res.status(404).json('删除失败!'))
+      .then(category => res.json(category))
+      .catch(err => res.status(404).json('删除失败!'))
   }
 )
 

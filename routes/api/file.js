@@ -9,6 +9,7 @@ const File = require('../../models/commodity/File')
  * @desc 新增档案信息接口
  * @access private
  */
+
 router.post(
   '/add',
   passport.authenticate('jwt', { session: false }),
@@ -25,7 +26,7 @@ router.post(
     if (req.body.guidePrice) fileFields.guidePrice = req.body.guidePrice
     if (req.body.cost) fileFields.cost = req.body.cost
 
-    new File(fileFields).save().then((file) => {
+    new File(fileFields).save().then(file => {
       res.json(file)
     })
   }
@@ -41,13 +42,13 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     File.find()
-      .then((file) => {
+      .then(file => {
         if (!file) {
           return res.status(404).json('没有任何内容')
         }
         res.json(file)
       })
-      .catch((err) => res.status(404).json(err))
+      .catch(err => res.status(404).json(err))
   }
 )
 
@@ -61,13 +62,13 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     File.find({ _id: req.params.id })
-      .then((file) => {
+      .then(file => {
         if (!file) {
           return res.status(404).json('没有任何内容')
         }
         res.json(file)
       })
-      .catch((err) => res.status(404).json(err))
+      .catch(err => res.status(404).json(err))
   }
 )
 
@@ -95,7 +96,7 @@ router.post(
       { _id: req.params.id },
       { $set: fileFields },
       { new: true }
-    ).then((file) => res.json(file))
+    ).then(file => res.json(file))
   }
 )
 
@@ -109,8 +110,8 @@ router.delete(
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     File.findOneAndRemove({ _id: req.params.id })
-      .then((file) => res.json(file))
-      .catch((err) => res.status(404).json('删除失败!'))
+      .then(file => res.json(file))
+      .catch(err => res.status(404).json('删除失败!'))
   }
 )
 
@@ -128,8 +129,8 @@ router.delete(
     const newIdArr = idArr.split(',')
 
     File.deleteMany({ _id: { $in: newIdArr } })
-      .then((file) => res.json(file))
-      .catch((err) => res.status(404).json('删除失败!'))
+      .then(file => res.json(file))
+      .catch(err => res.status(404).json('删除失败!'))
   }
 )
 module.exports = router

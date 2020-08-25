@@ -9,6 +9,7 @@ const Unit = require('../../models/commodity/Unit')
  * @desc 新增单位信息接口
  * @access private
  */
+
 router.post(
   '/add',
   passport.authenticate('jwt', { session: false }),
@@ -18,7 +19,7 @@ router.post(
     if (req.body.coding) unitFields.coding = req.body.coding
     if (req.body.name) unitFields.name = req.body.name
 
-    new Unit(unitFields).save().then((unit) => {
+    new Unit(unitFields).save().then(unit => {
       res.json(unit)
     })
   }
@@ -34,13 +35,13 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     Unit.find()
-      .then((unit) => {
+      .then(unit => {
         if (!unit) {
           return res.status(404).json('没有任何内容')
         }
         res.json(unit)
       })
-      .catch((err) => res.status(404).json(err))
+      .catch(err => res.status(404).json(err))
   }
 )
 
@@ -54,13 +55,13 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     Unit.find({ _id: req.params.id })
-      .then((unit) => {
+      .then(unit => {
         if (!unit) {
           return res.status(404).json('没有任何内容')
         }
         res.json(unit)
       })
-      .catch((err) => res.status(404).json(err))
+      .catch(err => res.status(404).json(err))
   }
 )
 
@@ -82,7 +83,7 @@ router.post(
       { _id: req.params.id },
       { $set: unitFields },
       { new: true }
-    ).then((unit) => res.json(unit))
+    ).then(unit => res.json(unit))
   }
 )
 
@@ -96,8 +97,8 @@ router.delete(
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     Unit.findOneAndRemove({ _id: req.params.id })
-      .then((unit) => res.json(unit))
-      .catch((err) => res.status(404).json('删除失败!'))
+      .then(unit => res.json(unit))
+      .catch(err => res.status(404).json('删除失败!'))
   }
 )
 

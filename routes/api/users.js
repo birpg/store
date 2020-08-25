@@ -12,10 +12,11 @@ const keys = require('../../config/keys')
  * @desc 返回的请求的json数据 注册
  * @access private
  */
+
 router.post('/register', (req, res) => {
   const name = req.body.name
 
-  User.find({ name }).then((user) => {
+  User.find({ name }).then(user => {
     if (user) return res.status(400).json('用户名已存在!')
     const newUser = new User({
       name: req.body.name,
@@ -28,8 +29,8 @@ router.post('/register', (req, res) => {
         newUser.password = hash
         newUser
           .save()
-          .then((user) => res.json(user))
-          .catch((err) => console.log(err))
+          .then(user => res.json(user))
+          .catch(err => console.log(err))
       })
     })
   })
@@ -45,11 +46,11 @@ router.post('/login', (req, res) => {
   const password = req.body.password
 
   // 查询数据库
-  User.findOne({ name }).then((user) => {
+  User.findOne({ name }).then(user => {
     if (!user) return res.status(404).json('用户不存在!')
     if (user.status == 'disable') return res.status(404).json('该账号已被禁用!')
     // 密码匹配
-    bcrypt.compare(password, user.password).then((isMatch) => {
+    bcrypt.compare(password, user.password).then(isMatch => {
       if (!isMatch) return res.status(400).json('密码错误!')
 
       // 自定义规则
@@ -67,7 +68,7 @@ router.post('/login', (req, res) => {
         })
       })
       user.logins++
-      user.save().catch((err) => console.log(err))
+      user.save().catch(err => console.log(err))
     })
   })
 })
@@ -101,7 +102,7 @@ router.post(
       { _id: req.params.id },
       { $set: userFields },
       { new: true }
-    ).then((user) => res.json(user))
+    ).then(user => res.json(user))
   }
 )
 
@@ -118,7 +119,7 @@ router.post(
     const newPassword = req.body.pass
 
     // 密码匹配
-    bcrypt.compare(password, req.user.password).then((isMatch) => {
+    bcrypt.compare(password, req.user.password).then(isMatch => {
       if (!isMatch) return res.status(400).json('密码错误!')
       bcrypt.genSalt(10, (err, salt) => {
         if (err) throw err
@@ -127,8 +128,8 @@ router.post(
           req.user.password = hash
           req.user
             .save()
-            .then((user) => res.json(user))
-            .catch((err) => console.log(err))
+            .then(user => res.json(user))
+            .catch(err => console.log(err))
         })
       })
     })
@@ -145,7 +146,7 @@ router.post(
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     const name = req.body.name
-    User.find({ name }).then((user) => {
+    User.find({ name }).then(user => {
       let boo = user.length
 
       if (boo) return res.status(400).json('用户名已存在!')
@@ -172,8 +173,8 @@ router.post(
           newUser.password = hash
           newUser
             .save()
-            .then((user) => res.json(user))
-            .catch((err) => console.log(err))
+            .then(user => res.json(user))
+            .catch(err => console.log(err))
         })
       })
     })
@@ -190,13 +191,13 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     User.find()
-      .then((user) => {
+      .then(user => {
         if (!user) {
           return res.status(404).json('未查到用户列表')
         }
         res.json(user)
       })
-      .catch((err) => res.status(404).json(err))
+      .catch(err => res.status(404).json(err))
   }
 )
 
@@ -232,7 +233,7 @@ router.post(
         { _id: req.params.id },
         { $set: userFields },
         { new: true }
-      ).then((user) => res.json(user))
+      ).then(user => res.json(user))
     } else {
       res.status(404).json('没有权限!')
     }
@@ -252,8 +253,8 @@ router.delete(
 
     if (role == '老板' || role == '系统管理员' || role == '店长') {
       User.findOneAndDelete({ _id: req.params.id })
-        .then((user) => res.json(user))
-        .catch((err) => res.status(404).json('删除失败!'))
+        .then(user => res.json(user))
+        .catch(err => res.status(404).json('删除失败!'))
     } else {
       res.status(404).json('没有权限!')
     }

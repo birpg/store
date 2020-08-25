@@ -9,6 +9,7 @@ const Storage = require('../../models/inventory/Storage')
  * @desc 新增入库信息接口
  * @access private
  */
+
 router.post(
   '/add',
   passport.authenticate('jwt', { session: false }),

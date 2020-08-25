@@ -18,7 +18,7 @@ router.post(
     if (req.body.coding) brandFields.coding = req.body.coding
     if (req.body.name) brandFields.name = req.body.name
 
-    new Brand(brandFields).save().then((brand) => {
+    new Brand(brandFields).save().then(brand => {
       res.json(brand)
     })
   }
@@ -34,13 +34,13 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     Brand.find()
-      .then((brand) => {
+      .then(brand => {
         if (!brand) {
           return res.status(404).json('没有任何内容')
         }
         res.json(brand)
       })
-      .catch((err) => res.status(404).json(err))
+      .catch(err => res.status(404).json(err))
   }
 )
 
@@ -54,13 +54,13 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     Brand.find({ _id: req.params.id })
-      .then((brand) => {
+      .then(brand => {
         if (!brand) {
           return res.status(404).json('没有任何内容')
         }
         res.json(brand)
       })
-      .catch((err) => res.status(404).json(err))
+      .catch(err => res.status(404).json(err))
   }
 )
 
@@ -81,7 +81,7 @@ router.post(
       { _id: req.params.id },
       { $set: brandFields },
       { new: true }
-    ).then((brand) => res.json(brand))
+    ).then(brand => res.json(brand))
   }
 )
 
@@ -95,8 +95,8 @@ router.delete(
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     Brand.findOneAndRemove({ _id: req.params.id })
-      .then((brand) => res.json(brand))
-      .catch((err) => res.status(404).json('删除失败!'))
+      .then(brand => res.json(brand))
+      .catch(err => res.status(404).json('删除失败!'))
   }
 )
 
