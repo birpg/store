@@ -7,9 +7,9 @@
 <script>
 import jwt_decode from 'jwt-decode'
 export default {
-  name: 'app',
+  name: 'App',
   componets: {},
-  created() {
+  created () {
     if (sessionStorage.storeToken) {
       const decoded = jwt_decode(sessionStorage.storeToken)
       // token存储到vuex中
@@ -18,7 +18,7 @@ export default {
     }
   },
   methods: {
-    isEmpty(value) {
+    isEmpty (value) {
       return (
         value === undefined ||
         value === null ||
