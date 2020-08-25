@@ -9,7 +9,6 @@ const types = {
   // 用户信息
   set_user: 'set_user',
 }
-
 // 需要维护的状态
 const state = {
   // 是否认证
