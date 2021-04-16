@@ -10,7 +10,7 @@ node.js + express + mongoose + vue 全家桶 + ES6 + sass + axios + element-ui
 
 ## 项目运行
 
-> 下载项目到本地: `git clone git@github.com:birpg/store.git`
+> 下载项目到本地: `git clone git@github.com:zhswchn/store.git`
 >
 > 下载依赖项: store 目录下运行 `npm install`, 安装完成后再次运行 `cd client` 和 `npm install`安装依赖
 >
