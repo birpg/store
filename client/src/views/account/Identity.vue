@@ -85,7 +85,7 @@ export default {
     },
     async getProfile () {
       // 获取数据
-      const { data: res } = await this.$axios('/api/identity')
+      const { data: res } = await this.$api.getIdentityApi()
       this.setPagination(res)
       this.allTableData = res
     },
@@ -124,7 +124,7 @@ export default {
     async onDeleteIdentity (row, index) {
       if (!this.role) return this.$message.error('没有权限!')
 
-      const { data: res } = await this.$axios.delete(`/api/identity/delete/${row._id}`)
+      const { data: res } = await this.$api.delIdentityApi(row._id)
       this.$message('删除成功')
       this.getProfile()
     }

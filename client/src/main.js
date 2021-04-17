@@ -5,8 +5,8 @@ import './utils/dataFilter'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import axios from './axios'
-import { message } from './assets/resetMessage'
+import api from './api/api'
+import { message } from './utils/resetMessage'
 
 const Pagination = () => import('./components/Pagination.vue')
 const Search = () => import('./components/Search.vue')
@@ -17,7 +17,7 @@ Vue.component('search', Search)
 Vue.component('dialog-table', DialogTable)
 
 Vue.prototype.$message = message
-Vue.prototype.$axios = axios
+Vue.prototype.$api = api
 
 Vue.config.productionTip = false
 

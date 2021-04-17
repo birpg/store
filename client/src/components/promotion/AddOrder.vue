@@ -277,7 +277,7 @@ export default {
     },
     // 获取数据
     async getProfile () {
-      const { data: res } = await this.$axios(`/api/order/${this.$route.query.id}`)
+      const { data: res } = await this.$api.getOrderItemApi(this.$route.query.id)
       this.form = res
       this.allTableData = res.table
       this.setPagination(this.form.table)
@@ -352,7 +352,7 @@ export default {
         if (this.form.audit == '已审核' && this.form.auditors != '') {
           this.form.auditDate = new Date()
         }
-        const { data: res } = await this.$axios.post(`/api/order/${url}`, this.form)
+        const { data: res } = await this.$api.putOrderItemApi(url,this.form)
         this.$message.success('保存成功！')
         this.cancel()
       })

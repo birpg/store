@@ -61,6 +61,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: 'AddFile',
   data () {
@@ -129,24 +130,24 @@ export default {
   },
   methods: {
     getCategoryOptions () {
-      return this.$axios('/api/category')
+      return this.$api.getCategoryApi()
     },
     getBrandOptions () {
-      return this.$axios('/api/brand')
+      return this.$api.getBrandApi()
     },
     getUnitOptions () {
-      return this.$axios('/api/unit')
+      return this.$api.getUnitApi()
     },
     // 获取选择器选项数据
     getData () {
-      this.$axios
+      axios
         .all([
           this.getCategoryOptions(),
           this.getBrandOptions(),
           this.getUnitOptions()
         ])
         .then(
-          this.$axios.spread((category, brand, unit) => {
+          axios.spread((category, brand, unit) => {
             this.categoryList = category.data
             this.brandList = brand.data
             this.unitList = unit.data
@@ -163,7 +164,7 @@ export default {
         //表单数据验证完成之后，提交数据
         const url = this.page.option == 'add' ? 'add' : `edit/${this.form._id}`
 
-        const { data: res } = await this.$axios.post(`/api/file/${url}`, this.form)
+        const { data: res } = await this.$api.putFileApi(url,this.form)
         // 操作成功
         this.$message.success('保存成功！')
         this.cancel()

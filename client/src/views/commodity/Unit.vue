@@ -85,7 +85,7 @@ export default {
     },
     // 获取数据
     async getProfile () {
-      const { data: res } = await this.$axios('/api/unit')
+      const { data: res } = await this.$api.getUnitApi()
       this.setPagination(res)
       this.allTableData = res
     },
@@ -114,7 +114,7 @@ export default {
     },
     // 删除
     async onDeleteUnit (row, index) {
-      const { data: res } = await this.$axios.delete(`/api/unit/delete/${row._id}`)
+      const { data: res } = await this.$api.delUnitApi(row._id)
       this.$message.success('删除成功')
       this.getProfile()
     }

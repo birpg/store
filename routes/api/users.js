@@ -17,7 +17,10 @@ router.post('/register', (req, res) => {
   const name = req.body.name
 
   User.find({ name }).then(user => {
-    if (user) return res.status(400).json('用户名已存在!')
+    if (user.length) {
+      console.log(1)
+      return res.status(400).json('用户名已存在!')
+    }
     const newUser = new User({
       name: req.body.name,
       password: req.body.password,

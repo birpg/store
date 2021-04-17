@@ -59,7 +59,7 @@ export default {
         const url =
           this.dialog.option == 'add' ? 'add' : `edit/${this.dialog.form._id}`
 
-        const { data: res } = await this.$axios.post(`/api/identity/${url}`, this.dialog.form)
+        const { data: res } = await this.$api.putIdentityApi(url,this.dialog.form)
         // 操作成功
         this.$message.success('保存成功！')
         this.dialog.show = false

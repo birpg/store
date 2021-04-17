@@ -45,7 +45,7 @@ export default {
         const url =
           this.dialog.option == 'add' ? 'add' : `edit/${this.dialog.form._id}`
 
-        this.$axios.post(`/api/unit/${url}`, this.dialog.form).then(res => {
+        this.$api.putUnitApi(url,this.dialog.form).then(res => {
           // 操作成功
           this.$message.success('保存成功！')
           this.dialog.show = false

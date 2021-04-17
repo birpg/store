@@ -99,12 +99,12 @@ export default {
   },
   methods: {
     async getCate () {
-      const { data: res } = await this.$axios('/api/category')
+      const { data: res } = await this.$api.getCategoryApi()
       this.category = res
     },
     // 获取商品档案数据
     async getProfile () {
-      const { data: res } = await this.$axios('/api/file')
+      const { data: res } = await this.$api.getFileApi()
       this.setPagination(res)
       this.allTableData = res
       this.dialogOpen()

@@ -138,7 +138,7 @@ export default {
         //表单数据验证完成之后，提交数据
         const url = this.page.option == 'add' ? 'add' : `edit/${this.form._id}`
 
-        const { data: res } = await this.$axios.post(`/api/supplier/${url}`, this.form)
+        const { data: res } = await this.$api.putSupplierApi(url,this.form)
         // 操作成功
         this.$message.success('保存成功！')
         this.cancel()

@@ -3,7 +3,7 @@
     <HeadNav></HeadNav>
     <LeftMenu></LeftMenu>
     <div class="rightContainer">
-      <router-view></router-view>
+      <router-view />
     </div>
   </div>
 </template>

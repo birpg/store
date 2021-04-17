@@ -169,7 +169,7 @@ export default {
   },
   methods: {
     async getProfile () {
-      const { data: res } = await this.$axios(`/api/outbound/${this.$route.query.id}`)
+      const { data: res } = await this.$api.getOutboundItemApi(this.$route.query.id)
       this.form = res
       this.allTableData = res.table
       this.setPagination(this.form.table)
@@ -244,7 +244,7 @@ export default {
         const url =
           this.$route.query.option === 'add' ? 'add' : `edit/${this.form._id}`
 
-        const { data: res } = await this.$axios.post(`/api/outbound/${url}`, this.form)
+        const { data: res } = await this.$api.putOutboundApi(url,this.form)
         this.$message.success('保存成功！')
         this.cancel()
       })

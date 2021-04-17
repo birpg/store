@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { Loading } from 'element-ui'
-import router from './router'
-import { message } from './assets/resetMessage'
+import router from '../router'
+import { message } from '../utils/resetMessage'
 
 let loading //定义loading变量
 function startLoading() {

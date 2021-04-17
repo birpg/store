@@ -102,7 +102,7 @@ export default {
   },
   methods: {
     async getProfile () {
-      const { data: res } = await this.$axios('/api/outbound')
+      const { data: res } = await this.$api.getOutboundApi()
       this.setPagination(res)
       this.allTableData = res
     },
@@ -137,7 +137,7 @@ export default {
     },
     // 删除
     async onDeleteOutBound (row, index) {
-      const { data: res } = await this.$axios.delete(`/api/outbound/delete/${row._id}`)
+      const { data: res } = await this.$api.delOutboundApi(row._id)
       this.$message.success('删除成功')
       this.getProfile()
     },

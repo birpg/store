@@ -103,7 +103,7 @@ export default {
   methods: {
     // 获取数据
     async getProfile () {
-      const { data: res } = await this.$axios('/api/storage')
+      const { data: res } = await this.$api.getStorageApi()
       this.setPagination(res)
       this.allTableData = res
     },
@@ -137,7 +137,7 @@ export default {
     },
     // 删除
     async onDeleteStorage (row, index) {
-      const { data: res } = await this.$axios.delete(`/api/storage/delete/${row._id}`)
+      const { data: res } = await this.$api.delStorageApi(row._id)
       this.$message.success('删除成功')
       this.getProfile()
     },

@@ -29,8 +29,8 @@ module.exports = {
       // 给 sass-loader 传递选项
       scss: {
         prependData: `
-                @import "~@/assets/global.scss";
-                @import "~@/assets/login.scss";
+                @import "~@/assets/styles/global.scss";
+                @import "~@/assets/styles/login.scss";
                 `,
       },
     },

@@ -90,7 +90,7 @@ export default {
     },
     // 获取数据
     async getProfile () {
-      const { data: res } = await this.$axios('/api/department')
+      const { data: res } = await this.$api.getDepartmentApi()
       this.setPagination(res)
       this.allTableData = res
     },
@@ -132,7 +132,7 @@ export default {
       if (!this.role) {
         return this.$message.error('没有权限!')
       }
-      const { data: res } = await this.$axios.delete(`/api/department/delete/${row._id}`)
+      const { data: res } = await this.$api.delDepartmentApi(row._id)
       this.$message.success('删除成功')
       this.getProfile()
     },

@@ -97,7 +97,7 @@ export default {
   methods: {
     // 获取数据
     async getProfile () {
-      const { data: res } = await this.$axios('/api/purchase')
+      const { data: res } = await this.$api.getPurchaseApi()
       this.setPagination(res)
       this.allTableData = res
     },
@@ -132,7 +132,7 @@ export default {
     },
     // 删除
     async onDeletePurchase (row, index) {
-      const { data: res } = await this.$axios.delete(`/api/purchase/delete/${row._id}`)
+      const { data: res } = await this.$api.getPurchaseApi(row._id)
       this.$message.success('删除成功')
       this.getProfile()
     },

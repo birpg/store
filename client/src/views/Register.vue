@@ -72,17 +72,15 @@ export default {
 
   methods: {
     submitForm (formName) {
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate(async valid => {
         if (valid) {
-          this.$axios
-            .post('/api/users/register', this.registerUser)
-            .then(res => {
-              this.$message({
+          this.$api.registerApi(this.registerUser).then(res => {
+            this.$message({
                 message: '注册成功！',
                 type: 'success'
               })
               this.$router.push('/login')
-            })
+          })
         }
       })
     }

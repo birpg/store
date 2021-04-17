@@ -51,7 +51,7 @@
         <el-table-column prop="operation" align="center" label="操作" min-width="100" fixed="right">
           <template v-slot="scope">
             <el-button type="text" icon="edit" size="small" @click="onEditOrder(scope.row)">修改</el-button>
-            <el-button type="text" icon="delete" size="small" @click="onDeleteOrder(scope.row, scope.$index)">删除</el-button>
+            <el-button type="text" icon="delete" size="small" @click="onDeleteOrder(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -77,7 +77,7 @@ export default {
   methods: {
     // 获取数据
     async getProfile () {
-      const { data: res } = await this.$axios('/api/order')
+      const { data: res } = await this.$api.getOrderApi()
       this.setPagination(res)
       this.allTableData = res
     },
@@ -111,8 +111,9 @@ export default {
       })
     },
     // 删除
-    async onDeleteOrder (row, index) {
-      const { data: res } = await this.$axios.delete(`/api/order/delete/${row._id}`)
+    async onDeleteOrder (row) {
+      const { data: res } = await this.$api.delOrderApi(row._id)
+      console.log(res);
       this.$message.success('删除成功')
       this.getProfile()
     },

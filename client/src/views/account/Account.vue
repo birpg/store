@@ -121,7 +121,7 @@ export default {
   methods: {
     // 获取数据
     async getProfile () {
-      const { data: res } = await this.$axios('api/users/employees')
+      const { data: res } = await this.$api.getAccountApi()
       this.setPagination(res)
       this.allTableData = res
     },
@@ -144,8 +144,7 @@ export default {
     async onEnable (row, name) {
       if (!this.role) return this.$message.error('没有权限!')
       row.status = name
-      const { data: res } = await this.$axios
-        .post(`/api/users/employee/edit/${row._id}`, row)
+      const { data: res } = await this.$api.putAccountApi(row._id,row)
       this.$message.success('修改成功！')
       this.getProfile()
     },
@@ -176,7 +175,7 @@ export default {
     async onDeleteAccount (row, index) {
       if (!this.role) return this.$message.error('没有权限!')
 
-      const { data: res } = await this.$axios.delete(`/api/users/employee/delete/${row._id}`)
+      const { data: res } = await this.$api.delAccountApi(row._id)
       this.$message('删除成功')
       this.getProfile()
     },

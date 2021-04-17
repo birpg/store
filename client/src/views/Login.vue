@@ -78,11 +78,7 @@ export default {
     login() {
       this.$refs.loginForm.validate(async valid => {
         if (!valid) return
-
-        const { data: res } = await this.$axios.post(
-          '/api/users/login',
-          this.loginUser
-        )
+        const { data: res } = await this.$api.loginApi(this.loginUser)
         const { token } = res
         sessionStorage.setItem('storeToken', token)
 

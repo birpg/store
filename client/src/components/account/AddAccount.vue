@@ -124,26 +124,17 @@ export default {
     if (this.page.option === 'edit') {
       this.form = JSON.parse(this.page.form)
     }
-    this.getAll()
+    this.getDepartment()
+    this.getIdentity()
   },
   methods: {
     async getDepartment () {
-      const { data: res } = await this.$axios('/api/department')
-      return res
+      const { data: res } = await this.$api.getDepartmentApi()
+      this.DepartmentData= res
     },
     async getIdentity () {
-      const { data: res } = await this.$axios('/api/identity')
-      return res
-    },
-    getAll () {
-      this.$axios.all([this.getDepartment(), this.getIdentity()])
-        .then(
-          this.$axios.spread((department, identity) => {
-            this.DepartmentData = department
-            this.IdentityData = identity
-          })
-        )
-        .catch(err => this.$message.error(err.message))
+      const { data: res } = await this.$api.getIdentityApi()
+      this.IdentityData = res
     },
     // 提交用户信息
     submitForm () {
@@ -151,7 +142,8 @@ export default {
         if (!valid) return
         const url = this.page.option == 'add' ? 'add' : `edit/${this.form._id}`
 
-        const { data: res } = await this.$axios.post(`/api/users/employee/${url}`, this.form)
+        const { data: res } = await this.$api.addAccountInfoApi(url,this.form)
+        console.log(res);
         // 操作成功
         this.$message.success('保存成功！')
         this.cancel()

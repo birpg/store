@@ -100,7 +100,7 @@ export default {
   methods: {
     async getProfile () {
       // 获取数据
-      const { data: res } = await this.$axios('/api/supplier')
+      const { data: res } = await this.$api.getSupplierApi()
       this.setPagination(res)
       this.allTableData = res
     },
@@ -135,7 +135,7 @@ export default {
     },
     // 删除
     async onDeleteSupplier (row, index) {
-      const { data: res } = await this.$axios.delete(`/api/supplier/delete/${row._id}`)
+      const { data: res } = await this.$api.delSupplierApi(row._id)
       this.$message('删除成功')
       this.getProfile()
     }

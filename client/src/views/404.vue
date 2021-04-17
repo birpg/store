@@ -1,6 +1,6 @@
 <template>
   <div class="notfound">
-    <img src="../assets/404.gif" />
+    <img src="../assets/images/404.gif" />
     <router-link to="/index">返回首页</router-link>
   </div>
 </template>

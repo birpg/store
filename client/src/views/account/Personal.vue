@@ -113,17 +113,13 @@ export default {
   methods: {
     // 获取当前用户信息
     getProfile () {
-      this.$axios.get('/api/users/current').then(res => {
+      this.$api.getUserApi().then(res => {
         this.form = res.data
       })
     },
     // 获取部门信息
     getDepartment () {
-      this.$axios
-        .get('/api/department', {
-          showLoading: false
-        })
-        .then(res => {
+      this.$api.getDepartmentApi().then(res => {
           this.DepartmentData = res.data
         })
     },
@@ -133,7 +129,7 @@ export default {
         if (valid) {
           const url = `edit/${this.$store.getters.user.id}`
 
-          this.$axios.post(`/api/users/current/${url}`, this.form).then(res => {
+          this.$api.putUserApi(url,this.form).then(res => {
             // 操作成功
             this.$message({
               message: '保存成功！',

@@ -169,7 +169,7 @@ export default {
   },
   methods: {
     async getProfile () {
-      const { data: res } = await this.$axios(`/api/storage/${this.$route.query.id}`)
+      const { data: res } = await this.$api.getStorageItemApi(this.$route.query.id)
       this.form = res
       this.allTableData = res.table
       this.setPagination(this.form.table)
@@ -243,7 +243,7 @@ export default {
         //表单数据验证完成之后，提交数据
         const url = this.$route.query.option == 'add' ? 'add' : `edit/${this.form._id}`
 
-        const { data: res } = await this.$axios.post(`/api/storage/${url}`, this.form)
+        const { data: res } = await this.$api.putStorageItemApi(url,this.form)
         this.$message.success('保存成功！')
         this.cancel()
       })

@@ -84,8 +84,7 @@ export default {
     submitForm () {
       this.$refs.form.validate(valid => {
         if (valid) {
-          this.$axios
-            .post('/api/users/updatePwd', this.form)
+          this.$api.putPasswordApi(this.form)
             .then(res => {
               this.$message({
                 message: '修改成功!请重新登录',

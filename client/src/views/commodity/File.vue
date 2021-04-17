@@ -144,7 +144,7 @@ export default {
   methods: {
     // 获取数据
     async getProfile () {
-      const { data: res } = await this.$axios('/api/file')
+      const { data: res } = await this.$api.getFileApi()
       this.setPagination(res)
       this.allTableData = res
     },
@@ -185,15 +185,13 @@ export default {
         this.idArr.push(item._id)
       })
       this.idArr = Array.from(new Set(this.idArr))
-      const { data: res } = await this.$axios
-        .delete(`/api/file/deleteAllSelected/${this.idArr}`)
+      const { data: res } = await this.$api.delFilesApi(this.idArr)
       this.$message('删除成功')
       this.getProfile()
     },
     // 删除
     async onDeleteFile (row, index) {
-      const { data: res } = await this.$axios
-        .delete(`/api/file/delete/${row._id}`)
+      const { data: res } = await this.$api.delFileApi(row._id)
       this.$message('删除成功')
       this.getProfile()
     },

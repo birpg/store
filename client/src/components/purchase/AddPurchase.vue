@@ -157,12 +157,12 @@ export default {
   methods: {
     // 获取供应商数据
     async getSupplier () {
-      const { data: res } = await this.$axios('/api/supplier')
+      const { data: res } = await this.$api.getSupplierApi()
       this.options = res
     },
     // 请求数据
     async getProfile () {
-      const { data: res } = await this.$axios(`/api/purchase/${this.$route.query.id}`)
+      const { data: res } = await this.$api.getPurchaseItemApi(this.$route.query.id)
       this.form = res
       this.allTableData = res.table
       this.setPagination(this.form.table)
@@ -252,10 +252,7 @@ export default {
         const url =
           this.$route.query.option === 'add' ? 'add' : `edit/${this.form._id}`
 
-        const { data: res } = await this.$axios.post(
-          `/api/purchase/${url}`,
-          this.form
-        )
+        const { data: res } = await this.$api.putPurchaseItemApi(url,this.form)
         // 操作成功
         this.$message.success('保存成功！')
         this.cancel()
